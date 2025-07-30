@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CartRepository extends JpaRepository<CartItem,Long> {
     List<CartItem> findByUsername(String username);
+    void deleteByUsername(String username);
 }

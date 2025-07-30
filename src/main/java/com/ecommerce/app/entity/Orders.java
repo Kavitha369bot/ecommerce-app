@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,6 @@ public class Orders {
     @Column(nullable = false)
     private String username;
     private LocalDate orderDate;
-    @OneToMany (cascade = CascadeType.ALL)
-    private List<OrderItem> items;
+    @OneToMany (mappedBy = "orders", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<OrderItem> items = new ArrayList<>();
 }

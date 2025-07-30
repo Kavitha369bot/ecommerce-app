@@ -22,5 +22,15 @@ public class OrderController {
        return orderService.getAllOrders(username);
     }
 
+    @GetMapping("/getById/{id}")
+    public Orders getOrdersById(@PathVariable Long id){
+        return orderService.getOrdersById(id);
+    }
+
+    @GetMapping("/api/admin/getAllOrders")
+    public List<Orders> getAllOrders(){
+        return orderService.getAllOrders();
+    }
+
 
 }

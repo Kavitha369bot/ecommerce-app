@@ -5,12 +5,15 @@ import com.ecommerce.app.entity.Orders;
 import com.ecommerce.app.entity.OrderItem;
 import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.OrderRepository;
+import jakarta.transaction.Transactional;
+import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -19,22 +22,27 @@ public class OrderServiceImpl implements OrderService{
     OrderRepository orderRepository;
     @Autowired
     CartRepository cartRepository;
+
+    @Transactional
     @Override
     public Orders placeOrder(String username) {
         List<CartItem> cartItems = cartRepository.findByUsername(username);
         List<OrderItem> orderItems = new ArrayList<>();
+        Orders order = new Orders();
+        order.setUsername(username);
+        order.setOrderDate(LocalDate.now());
         for(CartItem item:cartItems){
             OrderItem orderItem = new OrderItem();
             orderItem.setPrice(item.getProduct().getPrice());
             orderItem.setProductName(item.getProduct().getName());
             orderItem.setQuantity(item.getQuantity());
+            orderItem.setOrders(order);
             orderItems.add(orderItem);
         }
-        Orders order = new Orders();
-        order.setUsername(username);
-        order.setOrderDate(LocalDate.now());
         order.setItems(orderItems);
-        return orderRepository.save(order);
+        Orders savedOrder= orderRepository.save(order);
+        cartRepository.deleteByUsername(username);
+        return savedOrder;
     }
 
     @Override
@@ -42,4 +50,16 @@ public class OrderServiceImpl implements OrderService{
         List<Orders> orders=orderRepository.findByUsername(username);
         return orders;
     }
+
+    @Override
+    public Orders getOrdersById(Long id) {
+       return orderRepository.findById(id).orElseThrow(()->new RuntimeException("Order not found"));
+    }
+
+    @Override
+    public List<Orders> getAllOrders() {
+      return orderRepository.findAll();
+
+    }
+
 }

@@ -4,6 +4,7 @@ import com.ecommerce.app.entity.CartItem;
 import com.ecommerce.app.entity.Product;
 import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,13 @@ public class CartServiceImpl implements CartService{
       cart.setQuantity(quantity);
       cart.setProduct(product);
       cart.setUsername(username);
-      return cartRepository.save(cart);
+      CartItem cartItem= cartRepository.save(cart);
+      return  cartItem;
     }
 
     @Override
     public List<CartItem> getCartItems(Principal principal) {
-     return  cartRepository.findByUsername(principal.getName());
-
+     return cartRepository.findByUsername(principal.getName());
     }
+
 }

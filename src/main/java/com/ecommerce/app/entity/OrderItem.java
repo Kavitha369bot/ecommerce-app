@@ -1,9 +1,6 @@
 package com.ecommerce.app.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -15,4 +12,7 @@ public class OrderItem {
     private String productName;
     private int quantity;
     private double price;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Orders orders;
 }
