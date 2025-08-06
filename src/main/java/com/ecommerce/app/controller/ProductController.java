@@ -1,8 +1,12 @@
 package com.ecommerce.app.controller;
 
+import com.ecommerce.app.entity.Orders;
 import com.ecommerce.app.entity.Product;
+import com.ecommerce.app.service.ProductService;
 import com.ecommerce.app.service.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,22 +15,22 @@ import java.util.List;
 @RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductServiceImpl productServiceImpl;
+    private final ProductService productService;
 
     @GetMapping("/getAllProducts")
-    public List<Product> getAll() {
-        return productServiceImpl.getAllProducts();
+    public ResponseEntity<List<Product>> getAll() {
+        return new ResponseEntity<>(productService.getAllProducts(),HttpStatus.OK);
     }
 
     @PostMapping("/saveProduct")
-    public Product addProduct(@RequestBody Product product) {
-        return productServiceImpl.addProduct(product);
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        return new ResponseEntity<>(productService.addProduct(product),HttpStatus.CREATED);
     }
 
     @GetMapping("/product/{id}")
-    public Product getproductbyId(@PathVariable Long id){
+    public ResponseEntity<Product> getproductbyId(@PathVariable Long id){
         System.out.println("getting product by id"+id);
-        return productServiceImpl.getProductById(id);
+        return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);
     }
 
 }

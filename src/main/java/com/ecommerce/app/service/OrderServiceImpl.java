@@ -8,6 +8,8 @@ import com.ecommerce.app.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -60,6 +62,11 @@ public class OrderServiceImpl implements OrderService{
     public List<Orders> getAllOrders() {
       return orderRepository.findAll();
 
+    }
+
+    @Override
+    public Page<Orders> getOrdersBypage(Pageable pageable) {
+       return orderRepository.findAll(pageable);
     }
 
 }
